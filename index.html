@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+  <meta charset="UTF-8">
+  <script language="JavaScript">
+     
+    function checkString(tempUserValue){
+        //alert(tempUserValue)
+        var flag = true;
+        if(tempUserValue === 'undefined' || tempUserValue === null || tempUserValue === ""){
+            flag = false;
+        }
+        return flag;
+    } 
+    function showInput() {
+        console.log(localStorage.getItem("quarantine_dets"));
+        document.getElementById('display').innerHTML = 
+                    document.getElementById("user_input").value;
+        // Check browser support
+        if (typeof(Storage) !== "undefined") {
+            // Store
+           var txt = {
+                quarantine: []
+            };
+            if(localStorage.getItem("quarantine_dets") != null){
+                txt = JSON.parse(localStorage.getItem("quarantine_dets"));
+            }
+            var user_value = document.getElementById("user_input").value;
+            //if(user_value != undefined && user_value !=null && user_value != ""){
+            if(checkString(user_value)){
+                txt.quarantine.push(user_value);
+            }
+            var tempJSON = JSON.stringify(txt);
+            localStorage.setItem("quarantine_dets", tempJSON);
+            // Retrieve
+            document.getElementById("display").innerHTML = tempJSON;
+            console.log(JSON.stringify(localStorage.getItem("quarantine_dets")));
+        }
+    }
+    function clearLocalStorage(){
+        localStorage.removeItem("quarantine_dets");
+        document.getElementById("display").innerHTML = localStorage.getItem("quarantine_dets")
+        ? JSON.parse(localStorage.getItem("quarantine_dets")) : "Details are deleted";
+        console.log(JSON.stringify(localStorage.getItem("quarantine_dets")) != null ?
+        "no entry available" : JSON.stringify(localStorage.getItem("quarantine_dets")));
+    }
+
+
+  </script>
+
+  </head>
+<body>
+
+  <form>
+    <label><b>Enter a Message</b></label>
+    <input type="text" name="message" id="user_input">
+  </form>
+
+  <input type="submit" value="Save" onclick="showInput();">
+  <input type="submit" value="Clear" onclick="clearLocalStorage();"><br/>
+  <label>Your input: </label>
+  <p><span id='display'></span></p>
+</body>
+</html>
